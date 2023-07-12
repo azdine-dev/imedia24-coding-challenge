@@ -6,13 +6,15 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import javax.websocket.server.PathParam
 
 @RestController
 class ProductController(private val productService: ProductService) {
 
-    private val logger = LoggerFactory.getLogger(ProductController::class.java)!!
+    private val logger = LoggerFactory.getLogger(ProductController::class.java)
 
     @GetMapping("/products/{sku}", produces = ["application/json;charset=utf-8"])
     fun findProductsBySku(
@@ -26,5 +28,12 @@ class ProductController(private val productService: ProductService) {
         } else {
             ResponseEntity.ok(product)
         }
+    }
+
+    @PostMapping("/products", produces = ["application/json;charset=utf-8"])
+    fun createProduct(@RequestBody productResponse: ProductResponse) : ResponseEntity<ProductResponse> {
+        logger.info("create new  product ${productResponse.toString()}")
+        val productDto = productService.createProduct(productResponse);
+        return ResponseEntity.ok(productDto!!);
     }
 }
