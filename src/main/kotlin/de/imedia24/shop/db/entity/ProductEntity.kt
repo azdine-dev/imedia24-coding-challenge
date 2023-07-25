@@ -8,16 +8,19 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.PostPersist
+import javax.persistence.PrePersist
 import javax.persistence.Table
+
 
 @Entity
 @Table(name = "products")
 data class ProductEntity(
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "sku", nullable = false)
-    val sku: String,
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @Column(name = "sku", nullable = true)
+    var sku: String?,
 
     @Column(name = "name", nullable = false)
     val name: String,
@@ -35,4 +38,14 @@ data class ProductEntity(
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     val updatedAt: ZonedDateTime
-)
+
+
+){
+    @PostPersist
+    fun initializeSkuLenght() {
+        if(sku !=null){
+            sku = sku!!.substring(0,8);
+        }
+    }
+
+}

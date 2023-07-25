@@ -22,5 +22,14 @@ class ProductService(
         return productMapper.fromEntity(product);
     }
 
+    override fun getAllProductsBySku(skus: String): List<ProductResponse?> {
+        var skusArray = skus.split(",");
+        var productsBySkus = productRepository.findBySkuIn(skusArray);
+
+        return productsBySkus.map { productEntity -> productMapper.fromEntity(productEntity) }
+
+
+    }
+
 
 }

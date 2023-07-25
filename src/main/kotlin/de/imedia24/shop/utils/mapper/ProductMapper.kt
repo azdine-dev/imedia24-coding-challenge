@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 @Service
 class ProductMapper : Mapper<ProductResponse, ProductEntity> {
 
-    override fun fromEntity(entity: ProductEntity): ProductResponse? {
+    override fun fromEntity(entity: ProductEntity?): ProductResponse? {
         if(entity == null){
             return null;
         }
@@ -21,10 +21,11 @@ class ProductMapper : Mapper<ProductResponse, ProductEntity> {
         var createdAt: ZonedDateTime = ZonedDateTime.now();
         var updatedAt: ZonedDateTime = ZonedDateTime.now();
 
-        return ProductEntity(
-            domain.sku, domain.name, domain.description,
-            domain.price, createdAt, updatedAt
-        );
+            return ProductEntity(
+                domain.sku, domain.name, domain.description,
+                domain.price, createdAt, updatedAt
+            )
+
     }
 
 }
