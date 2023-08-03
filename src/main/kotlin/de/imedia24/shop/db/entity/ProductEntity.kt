@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.UpdateTimestamp
 import java.math.BigDecimal
 import java.time.ZonedDateTime
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -17,8 +18,8 @@ import javax.persistence.Table
 @Table(name = "products")
 data class ProductEntity(
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+//    @GeneratedValue(generator = "system-uuid")
+//    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @Column(name = "sku", nullable = true)
     var sku: String?,
 
@@ -31,6 +32,9 @@ data class ProductEntity(
     @Column(name = "price", nullable = false)
     val price: BigDecimal,
 
+    @Column(name = "productInfo", nullable = true)
+    val productInfo : String?,
+
     @UpdateTimestamp
     @Column(name = "created_at", nullable = false)
     val createdAt: ZonedDateTime,
@@ -41,10 +45,12 @@ data class ProductEntity(
 
 
 ){
-    @PostPersist
+    @PrePersist
     fun initializeSkuLenght() {
         if(sku !=null){
             sku = sku!!.substring(0,8);
+        }else{
+           sku = UUID.randomUUID().toString().substring(0,8);
         }
     }
 

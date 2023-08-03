@@ -14,6 +14,7 @@ class ProductMapper : Mapper<ProductResponse, ProductEntity> {
         }
         return ProductResponse(
             entity.sku, entity.name, entity.description!!,
+            entity.productInfo,
             entity.price);
     }
 
@@ -23,7 +24,7 @@ class ProductMapper : Mapper<ProductResponse, ProductEntity> {
 
             return ProductEntity(
                 domain.sku, domain.name, domain.description,
-                domain.price, createdAt, updatedAt
+                domain.price, domain.productInfo, createdAt, updatedAt
             )
 
     }

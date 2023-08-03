@@ -7,6 +7,7 @@ data class ProductResponse(
     val sku: String?=null,
     val name: String,
     val description: String,
+    val productInfo: String?,
     val price: BigDecimal
 ) {
     companion object {
@@ -14,6 +15,7 @@ data class ProductResponse(
             sku = sku,
             name = name,
             description = description ?: "",
+            productInfo = productInfo,
             price = price
         )
     }

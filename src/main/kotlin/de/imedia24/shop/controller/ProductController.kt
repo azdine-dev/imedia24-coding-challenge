@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import javax.websocket.server.PathParam
 
@@ -35,5 +37,20 @@ class ProductController(private val productService: ProductService) {
         logger.info("create new  product ${productResponse.toString()}")
         val productDto = productService.createProduct(productResponse);
         return ResponseEntity.ok(productDto!!);
+    }
+    @GetMapping("/products", produces = ["application/json;charset=utf-8"])
+    fun getAllProductsBySkus(@RequestParam skus :String) : ResponseEntity<List<ProductResponse?>> {
+        logger.info("get products by list of Skus ${skus}");
+        val products = productService.getAllProductsBySku(skus);
+        return ResponseEntity.ok(products);
+    }
+
+    @PutMapping("/products/{sku}")
+    fun updateProductBySku(@PathVariable("sku")sku : String, @RequestBody payload: ProductResponse): ResponseEntity<ProductResponse> {
+       val product = productService.updateProductBySku(sku, payload)
+           ?: return ResponseEntity
+                 .notFound().build();
+        return ResponseEntity.status(200)
+                .body(product)
     }
 }
